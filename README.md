@@ -282,9 +282,9 @@
   <script>
     const products = [
         { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
-        { id: 1, name: "Жидкость Skala", category: "juice", price: 450, image: 'Li/1.jpg', description: "Крепкость: 20мг, Объем: 30мл" },
-        { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
-        { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
+        { id: 2, name: "Жидкость Skala", category: "juice", price: 450, image: 'Li/1.jpg', description: "Крепкость: 20мг, Объем: 30мл" },
+        { id: 3, name: "Одноразка Waka", category: "disposable", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
+        { id: 4, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
      ];
 
     function renderProducts(filter = null) {
@@ -410,4 +410,3 @@
   </script>
 </body>
 </html>
-```
