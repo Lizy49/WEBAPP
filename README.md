@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -281,13 +280,11 @@
   
   <script>
     const products = [
-      { id: 1, name: "Pod Aegis", category: "pod", price: 1500, image: "https://via.placeholder.com/240x180", description: "Мощный и надежный под." },
-      { id: 2, name: "Жижа Mango", category: "juice", price: 600, image: "https://via.placeholder.com/240x180", description: "Сочный манго вкус." },
-      { id: 3, name: "Одноразка Elf Bar", category: "disposable", price: 750, image: "https://via.placeholder.com/240x180", description: "Популярная одноразка." },
-      { id: 4, name: "Испаритель GTX", category: "vaporizer", price: 400, image: "https://via.placeholder.com/240x180", description: "Испаритель для POD систем." },
-      { id: 5, name: "Pod Zeus X", category: "pod", price: 1800, image: "https://via.placeholder.com/240x180", description: "Зевс одобряет!" },
-      { id: 6, name: "Жижа Ambrosia", category: "juice", price: 800, image: "https://via.placeholder.com/240x180", description: "Нектар богов." }
-    ];
+        { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
+        { id: 1, name: "Жидкость Skala", category: "juice", price: 450, image: 'Li/1.jpg', description: "Крепкость: 20мг, Объем: 30мл" },
+        { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
+        { id: 1, name: "Испаритель Geekvape Aegis B Series coil ", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
+     ];
 
     function renderProducts(filter = null) {
       const list = document.getElementById('product-list');
@@ -412,4 +409,3 @@
   </script>
 </body>
 </html>
-```
