@@ -1,0 +1,415 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OlimpShop49</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0e0e1f;
+      background-image: url('https://img.freepik.com/free-photo/view-ancient-greek-architecture-with-temple-structure_23-2151664764.jpg?semt=ais_hybrid&w=740');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: thunderFlash 2s ease-in-out infinite;
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #ffd700;
+      text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00;
+    }
+
+    .welcome {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .category-tabs button {
+      background: #ffd700;
+      color: #000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .category-tabs button:hover {
+      background: #fff700;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+    }
+
+    .product-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product-card h3 {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #ffd700;
+    }
+
+    .product-card p {
+      font-size: 0.9rem;
+      color: #bbb;
+      margin: 10px 0;
+    }
+
+    .price {
+      color: #fff;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .qty-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .qty-controls button {
+      background: #ffd700;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #000;
+    }
+
+    .cart {
+      margin-top: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    #delivery {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      font-weight: bold;
+    }
+    
+    .delivery-info {
+      color: #ffd700;
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+
+    #address {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    #confirmOrder {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      background: #ffd700;
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #confirmOrder:hover {
+      background: #fff700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes thunderFlash {
+      0%, 100% { text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
+      50% { text-shadow: 0 0 25px #fffb00, 0 0 45px #fff200; }
+    }
+
+    #total-summary {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    #total-summary p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1 class="logo">⚡️ OlimpShop49 ⚡️</h1>
+    <p class="welcome">Добро пожаловать! Почувствуй гнев Зевса — выбери свой товар и будь молниеносным.</p>
+  </div>
+
+  <div class="container">
+    <div class="category-tabs">
+      <button onclick="filterCategory('pod')">Подики</button>
+      <button onclick="filterCategory('juice')">Жижи</button>
+      <button onclick="filterCategory('disposable')">Одноразки</button>
+      <button onclick="filterCategory('vaporizer')">Испарители</button>
+      <button onclick="filterCategory()">Все товары</button>
+    </div>
+    <div class="products" id="product-list">
+      <!-- JS добавит товары сюда -->
+    </div>
+  </div>
+
+  <div class="cart" id="cart">
+    <h2>🛒 Корзина</h2>
+    <div id="cart-items"></div>
+    
+    <select id="delivery">
+      <option value="">-- Выбери район, смертный --</option>
+      <option value="200">3-й микрорайон и Яма (200₽)</option>
+      <option value="225">Пригородный (225₽)</option>
+      <option value="225">Звезда / Автотэк (225₽)</option>
+      <option value="325">Солнечный / Пионерный (325₽)</option>
+      <option value="180">Центр (180₽)</option>
+    </select>
+    <p class="delivery-info">⚡ Выбери район и получи молнию Зевса прямо в руки!</p>
+    
+    <input type="text" id="address" placeholder="Точный адрес, смертный" />
+    <div id="total-summary"></div>
+    <button id="confirmOrder" onclick="submitOrder()">⚡ Подтвердить заказ ⚡</button>
+  </div>
+
+  <footer>
+    <hr style="border-color: rgba(255, 255, 255, 0.2); margin-bottom: 15px;">
+    <p>© 2025 OlimpShop49. Все права защищены.</p>
+    <p>
+      <a href="https://t.me/olimp_shop49" target="_blank">Мы в Telegram</a> |
+      <a href="#">Политика конфиденциальности</a> |
+      <a href="#">Контакты</a>
+    </p>
+  </footer>
+
+  <!-- Подключаем Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <script>
+    const products = [
+      { id: 1, name: "Pod Aegis", category: "pod", price: 1500, image: "https://via.placeholder.com/240x180", description: "Мощный и надежный под." },
+      { id: 2, name: "Жижа Mango", category: "juice", price: 600, image: "https://via.placeholder.com/240x180", description: "Сочный манго вкус." },
+      { id: 3, name: "Одноразка Elf Bar", category: "disposable", price: 750, image: "https://via.placeholder.com/240x180", description: "Популярная одноразка." },
+      { id: 4, name: "Испаритель GTX", category: "vaporizer", price: 400, image: "https://via.placeholder.com/240x180", description: "Испаритель для POD систем." },
+      { id: 5, name: "Pod Zeus X", category: "pod", price: 1800, image: "https://via.placeholder.com/240x180", description: "Зевс одобряет!" },
+      { id: 6, name: "Жижа Ambrosia", category: "juice", price: 800, image: "https://via.placeholder.com/240x180", description: "Нектар богов." }
+    ];
+
+    function renderProducts(filter = null) {
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      const filtered = filter ? products.filter(p => p.category === filter) : products;
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Товаров нет, смертный! Проверь позже.</p>';
+        return;
+      }
+      
+      for (const product of filtered) {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <p class="price">${product.price} ₽</p>
+          <div class="qty-controls">
+            <button onclick="decreaseQty(${product.id})">−</button>
+            <span id="qty-${product.id}">0</span>
+            <button onclick="increaseQty(${product.id})">+</button>
+          </div>
+        `;
+        list.appendChild(card);
+      }
+    }
+
+    function filterCategory(cat) {
+      renderProducts(cat);
+    }
+
+    function increaseQty(id) {
+      const span = document.getElementById(`qty-${id}`);
+      let count = parseInt(span.innerText);
+      if (count < 15) count++;
+      span.innerText = count;
+      updateCartDisplay();
+    }
+
+    function decreaseQty(id) {
+      const span = document.getElementById(`qty-${id}`);
+      let count = parseInt(span.innerText);
+      if (count > 0) count--;
+      span.innerText = count;
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = '';
+      
+      let subtotal = 0;
+      for (const product of products) {
+        const qty = parseInt(document.getElementById(`qty-${product.id}`).innerText);
+        if (qty > 0) {
+          const p = document.createElement('p');
+          p.textContent = `${product.name} x${qty} — ${product.price * qty}₽`;
+          cartItems.appendChild(p);
+          subtotal += product.price * qty;
+        }
+      }
+      
+      const deliverySelect = document.getElementById("delivery");
+      const deliveryPrice = deliverySelect.value ? parseInt(deliverySelect.value) : 0;
+      const deliveryName = deliverySelect.selectedOptions[0]?.text || "";
+      
+      document.getElementById("total-summary").innerHTML = `
+        <p>Товары: ${subtotal}₽</p>
+        ${deliveryName ? `<p>Доставка: ${deliveryName}</p>` : ''}
+        <p style="color: #ffd700;">Итого: ${subtotal + deliveryPrice}₽</p>
+      `;
+    }
+
+    function submitOrder() {
+      const address = document.getElementById('address').value.trim();
+      if (!address) {
+        alert("Где адрес, смертный? Зевс не всевидящий!");
+        return;
+      }
+      
+      const deliverySelect = document.getElementById("delivery");
+      if (!deliverySelect.value) {
+        alert("Выбери район, иначе Гермес не найдет дорогу!");
+        return;
+      }
+
+      const cart = products
+        .map(p => {
+          const qty = parseInt(document.getElementById(`qty-${p.id}`).innerText);
+          return qty > 0 ? { ...p, qty } : null;
+        })
+        .filter(Boolean);
+
+      if (cart.length === 0) {
+        alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
+        return;
+      }
+
+      const summary = {
+        address,
+        delivery: deliverySelect.selectedOptions[0].text,
+        items: cart,
+        subtotal: cart.reduce((sum, p) => sum + p.price * p.qty, 0),
+        deliveryPrice: parseInt(deliverySelect.value),
+        total: cart.reduce((sum, p) => sum + p.price * p.qty, 0) + parseInt(deliverySelect.value),
+        timestamp: new Date().toISOString()
+      };
+
+      // Отправляем данные через WebApp API
+      Telegram.WebApp.sendData(JSON.stringify(summary));
+      // Закрытие WebApp
+      Telegram.WebApp.close();
+    }
+
+    // Инициализация
+    renderProducts();
+    
+    // Обновляем корзину при изменении доставки
+    document.getElementById("delivery").addEventListener("change", updateCartDisplay);
+  </script>
+</body>
+</html>
+```
