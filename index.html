@@ -148,6 +148,25 @@
       padding: 20px;
       border-radius: 10px;
       backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    #delivery {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      font-weight: bold;
+    }
+    
+    .delivery-info {
+      color: #ffd700;
+      margin: 5px 0;
+      font-size: 0.9rem;
     }
 
     #address {
@@ -168,6 +187,12 @@
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #confirmOrder:hover {
+      background: #fff700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
     }
 
     footer {
@@ -191,11 +216,20 @@
       0%, 100% { text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
       50% { text-shadow: 0 0 25px #fffb00, 0 0 45px #fff200; }
     }
+
+    #total-summary {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    #total-summary p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
   <div class="hero">
-    <h1 class="logo">⚡ OlimpShop49 ⚡</h1>
+    <h1 class="logo">⚡️ OlimpShop49 ⚡️</h1>
     <p class="welcome">Добро пожаловать! Почувствуй гнев Зевса — выбери свой товар и будь молниеносным.</p>
   </div>
 
@@ -205,6 +239,7 @@
       <button onclick="filterCategory('juice')">Жижи</button>
       <button onclick="filterCategory('disposable')">Одноразки</button>
       <button onclick="filterCategory('vaporizer')">Испарители</button>
+      <button onclick="filterCategory()">Все товары</button>
     </div>
     <div class="products" id="product-list">
       <!-- JS добавит товары сюда -->
@@ -214,15 +249,27 @@
   <div class="cart" id="cart">
     <h2>🛒 Корзина</h2>
     <div id="cart-items"></div>
-    <input type="text" id="address" placeholder="Введите адрес доставки" />
-    <button id="confirmOrder" onclick="submitOrder()">Подтвердить заказ</button>
+    
+    <select id="delivery">
+      <option value="">-- Выбери район, смертный --</option>
+      <option value="200">3-й микрорайон и Яма (200₽)</option>
+      <option value="225">Пригородный (225₽)</option>
+      <option value="225">Звезда / Автотэк (225₽)</option>
+      <option value="325">Солнечный / Пионерный (325₽)</option>
+      <option value="180">Центр (180₽)</option>
+    </select>
+    <p class="delivery-info">⚡ Выбери район и получи молнию Зевса прямо в руки!</p>
+    
+    <input type="text" id="address" placeholder="Точный адрес, смертный" />
+    <div id="total-summary"></div>
+    <button id="confirmOrder" onclick="submitOrder()">⚡ Подтвердить заказ ⚡</button>
   </div>
 
   <footer>
     <hr style="border-color: rgba(255, 255, 255, 0.2); margin-bottom: 15px;">
     <p>© 2025 OlimpShop49. Все права защищены.</p>
     <p>
-      <a href="https://instagram.com/olimp_shop49" target="_blank">Мы в Telegram</a> |
+      <a href="https://t.me/olimp_shop49" target="_blank">Мы в Telegram</a> |
       <a href="#">Политика конфиденциальности</a> |
       <a href="#">Контакты</a>
     </p>
@@ -236,13 +283,21 @@
       { id: 1, name: "Pod Aegis", category: "pod", price: 1500, image: "https://via.placeholder.com/240x180", description: "Мощный и надежный под." },
       { id: 2, name: "Жижа Mango", category: "juice", price: 600, image: "https://via.placeholder.com/240x180", description: "Сочный манго вкус." },
       { id: 3, name: "Одноразка Elf Bar", category: "disposable", price: 750, image: "https://via.placeholder.com/240x180", description: "Популярная одноразка." },
-      { id: 4, name: "Испаритель GTX", category: "vaporizer", price: 400, image: "https://via.placeholder.com/240x180", description: "Испаритель для POD систем." }
+      { id: 4, name: "Испаритель GTX", category: "vaporizer", price: 400, image: "https://via.placeholder.com/240x180", description: "Испаритель для POD систем." },
+      { id: 5, name: "Pod Zeus X", category: "pod", price: 1800, image: "https://via.placeholder.com/240x180", description: "Зевс одобряет!" },
+      { id: 6, name: "Жижа Ambrosia", category: "juice", price: 800, image: "https://via.placeholder.com/240x180", description: "Нектар богов." }
     ];
 
     function renderProducts(filter = null) {
       const list = document.getElementById('product-list');
       list.innerHTML = '';
       const filtered = filter ? products.filter(p => p.category === filter) : products;
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Товаров нет, смертный! Проверь позже.</p>';
+        return;
+      }
+      
       for (const product of filtered) {
         const card = document.createElement('div');
         card.className = 'product-card';
@@ -284,19 +339,41 @@
     function updateCartDisplay() {
       const cartItems = document.getElementById("cart-items");
       cartItems.innerHTML = '';
+      
+      let subtotal = 0;
       for (const product of products) {
         const qty = parseInt(document.getElementById(`qty-${product.id}`).innerText);
         if (qty > 0) {
           const p = document.createElement('p');
           p.textContent = `${product.name} x${qty} — ${product.price * qty}₽`;
           cartItems.appendChild(p);
+          subtotal += product.price * qty;
         }
       }
+      
+      const deliverySelect = document.getElementById("delivery");
+      const deliveryPrice = deliverySelect.value ? parseInt(deliverySelect.value) : 0;
+      const deliveryName = deliverySelect.selectedOptions[0]?.text || "";
+      
+      document.getElementById("total-summary").innerHTML = `
+        <p>Товары: ${subtotal}₽</p>
+        ${deliveryName ? `<p>Доставка: ${deliveryName}</p>` : ''}
+        <p style="color: #ffd700;">Итого: ${subtotal + deliveryPrice}₽</p>
+      `;
     }
 
     function submitOrder() {
       const address = document.getElementById('address').value.trim();
-      if (!address) return alert("Введите адрес доставки");
+      if (!address) {
+        alert("Где адрес, смертный? Зевс не всевидящий!");
+        return;
+      }
+      
+      const deliverySelect = document.getElementById("delivery");
+      if (!deliverySelect.value) {
+        alert("Выбери район, иначе Гермес не найдет дорогу!");
+        return;
+      }
 
       const cart = products
         .map(p => {
@@ -305,12 +382,19 @@
         })
         .filter(Boolean);
 
-      if (cart.length === 0) return alert("Корзина пуста");
+      if (cart.length === 0) {
+        alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
+        return;
+      }
 
       const summary = {
         address,
+        delivery: deliverySelect.selectedOptions[0].text,
         items: cart,
-        total: cart.reduce((sum, p) => sum + p.price * p.qty, 0)
+        subtotal: cart.reduce((sum, p) => sum + p.price * p.qty, 0),
+        deliveryPrice: parseInt(deliverySelect.value),
+        total: cart.reduce((sum, p) => sum + p.price * p.qty, 0) + parseInt(deliverySelect.value),
+        timestamp: new Date().toISOString()
       };
 
       // Отправляем данные через WebApp API
@@ -321,6 +405,9 @@
 
     // Инициализация
     renderProducts();
+    
+    // Обновляем корзину при изменении доставки
+    document.getElementById("delivery").addEventListener("change", updateCartDisplay);
   </script>
 </body>
 </html>
