@@ -99,6 +99,7 @@
     <select id="delivery">
       <option value="">-- Выбери район, смертный --</option>
       <option value="200">3-й микрорайон и Яма (200₽)</option>
+      <option value="200">5-й микрорайон (200₽)</option>
       <option value="225">Пригородный (225₽)</option>
       <option value="225">Звезда / Автотэк (225₽)</option>
       <option value="325">Солнечный / Пионерный (325₽)</option>
@@ -149,7 +150,7 @@
       { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("4") },
       { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("5") },
       { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS 0.6 Ом" },
-      { id: 7, name: "Жидкость XYLINET?", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("7") }
+      { id: 7, name: "Жидкость XYLINET x3 1шт.", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("7") }
     ];
 
     let cart = [];
