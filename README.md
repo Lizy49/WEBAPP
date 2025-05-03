@@ -128,8 +128,9 @@
       const savedStock = localStorage.getItem('olimpShopStock');
       return savedStock ? JSON.parse(savedStock) : {
         "4": { "Апельсиновая газировка": 1, "Лимонад": 1, "Пиноколада груша": 1, "Ежевичный лимонад": 1 },
-        "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол": 3 },
+        "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол х3": 1 },
         "7": { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 }
+        "6": {"Картридж для XROS": 7 }
       };
     }
 
@@ -146,8 +147,8 @@
       { id: 3, name: "Одноразка Waka", category: "disposable", price: 2000, image: 'od/1.jpg', description: "На 10000 тяг, чтобы вставило" },
       { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["4"] },
       { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["5"] },
-      { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS 0.6 Ом" },
-      { id: 7, name: "Жидкость XYLINET x3 1шт.", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["7"] }
+      { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS 0.2 Ом", flavors: serverStock ["1"] },
+      { id: 7, name: "Жидкость XYLINET?", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["7"] }
     ];
 
     let cart = [];
