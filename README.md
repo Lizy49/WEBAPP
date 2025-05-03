@@ -1,4 +1,4 @@
-```html
+```
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -45,6 +45,11 @@
     .product-card h3 { margin-top: 10px; font-size: 1.2rem; color: #ffd700; }
     .product-card p { font-size: 0.9rem; color: #bbb; margin: 10px 0; }
     .price { color: #fff; font-weight: bold; margin-bottom: 10px; }
+    .qty-controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; }
+    .qty-controls button {
+      background: #ffd700; border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #000;
+    }
     .flavor-select { margin: 10px 0; width: 100%; padding: 6px; border-radius: 5px; border: none; }
     .cart {
       margin-top: 40px; background: rgba(0, 0, 0, 0.6); padding: 20px;
@@ -128,9 +133,9 @@
       const savedStock = localStorage.getItem('olimpShopStock');
       return savedStock ? JSON.parse(savedStock) : {
         "4": { "Апельсиновая газировка": 1, "Лимонад": 1, "Пиноколада груша": 1, "Ежевичный лимонад": 1 },
-        "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол х3": 1 },
-        "7": { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 }
-        "6": {"Картридж для XROS": 7 }
+        "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол": 3 },
+        "7": { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 },
+        "6": { "0.6 Ом": 5, "0.8 Ом": 3, "1.0 Ом": 2 }
       };
     }
 
@@ -147,8 +152,8 @@
       { id: 3, name: "Одноразка Waka", category: "disposable", price: 2000, image: 'od/1.jpg', description: "На 10000 тяг, чтобы вставило" },
       { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["4"] },
       { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["5"] },
-      { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS 0.2 Ом", flavors: serverStock ["1"] },
-      { id: 7, name: "Жидкость XYLINET?", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["7"] }
+      { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS", flavors: serverStock["6"] },
+      { id: 7, name: "Жидкость XYLINET x3 1шт.", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["7"] }
     ];
 
     let cart = [];
@@ -175,94 +180,98 @@
           <p>${product.description}</p>
           <p class="price">${product.price} ₽</p>
           ${product.flavors ? `
-            <select class="flavor-select" id="flavor-${product.id}" onchange="addToCart(${product.id})">
-              <option value="">-- Выбери вкус --</option>
+            <select class="flavor-select" id="flavor-${product.id}" onchange="updateMaxQty(${product.id})">
+              <option value="">-- Выбери ${product.category === 'vaporizer' ? 'сопротивление' : 'вкус'} --</option>
               ${flavorOptions}
             </select>
             <div class="stock-info" id="stock-${product.id}">
               ${Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>')}
             </div>
-          ` : ''}
+            <div class="qty-controls">
+              <button onclick="decreaseQty(${product.id})">−</button>
+              <span id="qty-${product.id}">0</span>
+              <button onclick="increaseQty(${product.id})">+</button>
+            </div>
+          ` : `
+            <div class="qty-controls">
+              <button onclick="decreaseQty(${product.id})">−</button>
+              <span id="qty-${product.id}">0</span>
+              <button onclick="increaseQty(${product.id})">+</button>
+            </div>
+          `}
         `;
         list.appendChild(card);
       }
     }
 
-    function addToCart(productId) {
-      const flavorSelect = document.getElementById(`flavor-${productId}`);
+    function updateMaxQty(id) {
+      const flavorSelect = document.getElementById(`flavor-${id}`);
       const selectedFlavor = flavorSelect.value;
-      if (!selectedFlavor) return;
-
-      const product = products.find(p => p.id === productId);
-      if (!product.flavors[selectedFlavor] || product.flavors[selectedFlavor] <= 0) {
-        alert("Этот вкус закончился, дебил!");
-        flavorSelect.value = "";
-        return;
+      const product = products.find(p => p.id === id);
+      const maxQty = product.flavors[selectedFlavor];
+      const qtySpan = document.getElementById(`qty-${id}`);
+      const currentQty = parseInt(qtySpan.innerText);
+      
+      if (currentQty > maxQty) {
+        qtySpan.innerText = maxQty;
       }
-
-      // Уменьшаем остаток локально и сохраняем
-      product.flavors[selectedFlavor]--;
-      serverStock[productId.toString()][selectedFlavor] = product.flavors[selectedFlavor];
-      saveStock(serverStock);
-
-      // Обновляем отображение остатков
-      document.getElementById(`stock-${productId}`).innerHTML = 
-        Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>');
-
-      // Добавляем в корзину
-      const existingItem = cart.find(item => item.id === productId && item.flavor === selectedFlavor);
-      if (existingItem) {
-        existingItem.qty++;
-      } else {
-        cart.push({
-          id: productId,
-          name: product.name,
-          flavor: selectedFlavor,
-          price: product.price,
-          qty: 1
-        });
-      }
-
-      // Обновляем селектор вкусов
-      updateFlavorSelect(productId);
-
-      // Обновляем корзину
       updateCartDisplay();
     }
 
-    function updateFlavorSelect(productId) {
-      const product = products.find(p => p.id === productId);
-      const flavorSelect = document.getElementById(`flavor-${productId}`);
-      if (!flavorSelect) return;
+    function filterCategory(cat) { renderProducts(cat); }
 
-      const selectedFlavor = flavorSelect.value;
-      flavorSelect.innerHTML = `<option value="">-- Выбери вкус --</option>` + 
-        Object.entries(product.flavors).map(
-          ([flavor, stock]) => `<option value="${flavor}" ${stock === 0 ? 'disabled' : ''}>
-                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
-                                </option>`
-        ).join('');
-
-      if (selectedFlavor && product.flavors[selectedFlavor] > 0) {
-        flavorSelect.value = selectedFlavor;
-      } else {
-        flavorSelect.value = "";
+    function increaseQty(id) {
+      const qtySpan = document.getElementById(`qty-${id}`);
+      const flavorSelect = document.getElementById(`flavor-${id}`);
+      const product = products.find(p => p.id === id);
+      
+      let selectedFlavor = null;
+      if (flavorSelect) {
+        selectedFlavor = flavorSelect.value;
+        if (!selectedFlavor) {
+          alert("Сначала выбери тип, дебил!");
+          return;
+        }
       }
+
+      let currentQty = parseInt(qtySpan.innerText);
+      let maxQty = product.flavors ? product.flavors[selectedFlavor] : 15;
+
+      if (currentQty < maxQty) {
+        currentQty++;
+        qtySpan.innerText = currentQty;
+      } else {
+        alert("Больше нет в наличии, идиот!");
+      }
+      updateCartDisplay();
     }
 
-    function filterCategory(cat) { renderProducts(cat); }
+    function decreaseQty(id) {
+      const qtySpan = document.getElementById(`qty-${id}`);
+      let currentQty = parseInt(qtySpan.innerText);
+      if (currentQty > 0) {
+        currentQty--;
+        qtySpan.innerText = currentQty;
+      }
+      updateCartDisplay();
+    }
 
     function updateCartDisplay() {
       const cartItems = document.getElementById("cart-items");
       cartItems.innerHTML = '';
       let subtotal = 0;
 
-      for (const item of cart) {
-        const cost = item.price * item.qty;
-        const p = document.createElement('p');
-        p.textContent = `${item.name} (${item.flavor}) x${item.qty} — ${cost}₽`;
-        cartItems.appendChild(p);
-        subtotal += cost;
+      for (const product of products) {
+        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
+        if (qty > 0) {
+          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
+          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
+          const cost = product.price * qty;
+          const p = document.createElement('p');
+          p.textContent = `${product.name} (${flavor}) x${qty} — ${cost}₽`;
+          cartItems.appendChild(p);
+          subtotal += cost;
+        }
       }
 
       const deliverySelect = document.getElementById("delivery");
@@ -290,6 +299,31 @@
         alert("Выбери район, иначе Гермес не найдет дорогу!");
         return;
       }
+
+      const cart = products.map(product => {
+        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
+        if (qty > 0) {
+          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
+          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
+          
+          // Обновляем остатки
+          if (product.flavors && flavorEl) {
+            product.flavors[flavor] -= qty;
+            if (product.flavors[flavor] < 0) product.flavors[flavor] = 0;
+            serverStock[product.id][flavor] = product.flavors[flavor];
+          }
+
+          return {
+            id: product.id,
+            name: product.name,
+            qty,
+            flavor,
+            price: product.price
+          };
+        }
+        return null;
+      }).filter(Boolean);
+
       if (cart.length === 0) {
         alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
         return;
@@ -308,8 +342,10 @@
         timestamp: new Date().toISOString()
       };
 
-      // Очищаем корзину и обновляем список товаров
-      cart = [];
+      // Сохраняем обновленные остатки
+      saveStock(serverStock);
+
+      // Обновляем интерфейс после заказа
       renderProducts();
       updateCartDisplay();
 
@@ -327,5 +363,5 @@
     document.getElementById("delivery").addEventListener("change", updateCartDisplay);
   </script>
 </body>
-</html> 
+</html>
 ```
