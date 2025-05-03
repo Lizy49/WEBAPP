@@ -138,6 +138,7 @@
 
     // Копия для управления остатками
     let stock = JSON.parse(JSON.stringify(products));
+    let cart = [];
 
     function renderProducts(filter = null) {
       const list = document.getElementById('product-list');
@@ -152,7 +153,7 @@
         card.className = 'product-card';
         const flavorOptions = product.flavors ? Object.entries(product.flavors).map(
           ([flavor, stock]) => `<option value="${flavor}" ${stock === 0 ? 'disabled' : ''}>
-                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ` (${stock} шт)`} 
+                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
                                 </option>`
         ).join('') : '';
         card.innerHTML = `
@@ -160,85 +161,85 @@
           <h3>${product.name}</h3>
           <p>${product.description}</p>
           <p class="price">${product.price} ₽</p>
-          ${product.flavors ? `<select class="flavor-select" id="flavor-${product.id}" onchange="updateMaxQty(${product.id})">${flavorOptions}</select>` : ''}
-          <div class="qty-controls">
-            <button onclick="decreaseQty(${product.id})">−</button>
-            <span id="qty-${product.id}">0</span>
-            <button onclick="increaseQty(${product.id})">+</button>
-          </div>
+          ${product.flavors ? `<select class="flavor-select" id="flavor-${product.id}" onchange="addToCart(${product.id})">
+                                <option value="">-- Выбери вкус --</option>
+                                ${flavorOptions}
+                              </select>` : ''}
         `;
         list.appendChild(card);
       }
     }
 
-    function updateMaxQty(id) {
-      const flavorSelect = document.getElementById(`flavor-${id}`);
+    function addToCart(productId) {
+      const flavorSelect = document.getElementById(`flavor-${productId}`);
       const selectedFlavor = flavorSelect.value;
-      const product = stock.find(p => p.id === id);
-      const maxQty = product.flavors[selectedFlavor];
-      const qtySpan = document.getElementById(`qty-${id}`);
-      const currentQty = parseInt(qtySpan.innerText);
-      
-      if (currentQty > maxQty) {
-        qtySpan.innerText = maxQty;
+      if (!selectedFlavor) return;
+
+      const product = stock.find(p => p.id === productId);
+      if (!product.flavors[selectedFlavor] || product.flavors[selectedFlavor] <= 0) {
+        alert("Этот вкус закончился, дебил!");
+        flavorSelect.value = "";
+        return;
       }
+
+      // Уменьшаем остаток
+      product.flavors[selectedFlavor]--;
+
+      // Добавляем в корзину
+      const existingItem = cart.find(item => item.id === productId && item.flavor === selectedFlavor);
+      if (existingItem) {
+        existingItem.qty++;
+      } else {
+        cart.push({
+          id: productId,
+          name: product.name,
+          flavor: selectedFlavor,
+          price: product.price,
+          qty: 1
+        });
+      }
+
+      // Обновляем селектор вкусов
+      updateFlavorSelect(productId);
+
+      // Обновляем корзину
       updateCartDisplay();
+    }
+
+    function updateFlavorSelect(productId) {
+      const product = stock.find(p => p.id === productId);
+      const flavorSelect = document.getElementById(`flavor-${productId}`);
+      if (!flavorSelect) return;
+
+      const selectedFlavor = flavorSelect.value;
+      flavorSelect.innerHTML = `<option value="">-- Выбери вкус --</option>` + 
+        Object.entries(product.flavors).map(
+          ([flavor, stock]) => `<option value="${flavor}" ${stock === 0 ? 'disabled' : ''}>
+                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
+                                </option>`
+        ).join('');
+
+      // Возвращаем выбранный вкус, если он еще в наличии
+      if (selectedFlavor && product.flavors[selectedFlavor] > 0) {
+        flavorSelect.value = selectedFlavor;
+      } else {
+        flavorSelect.value = "";
+      }
     }
 
     function filterCategory(cat) { renderProducts(cat); }
-
-    function increaseQty(id) {
-      const qtySpan = document.getElementById(`qty-${id}`);
-      const flavorSelect = document.getElementById(`flavor-${id}`);
-      const product = stock.find(p => p.id === id);
-      
-      let selectedFlavor = null;
-      if (flavorSelect) {
-        selectedFlavor = flavorSelect.value;
-        if (!selectedFlavor || selectedFlavor === "-- Выбери вкус --") {
-          alert("Сначала выбери вкус, дебил!");
-          return;
-        }
-      }
-
-      let currentQty = parseInt(qtySpan.innerText);
-      let maxQty = product.flavors ? product.flavors[selectedFlavor] : 15;
-
-      if (currentQty < maxQty) {
-        currentQty++;
-        qtySpan.innerText = currentQty;
-      } else {
-        alert("Больше нет в наличии, идиот!");
-      }
-      updateCartDisplay();
-    }
-
-    function decreaseQty(id) {
-      const qtySpan = document.getElementById(`qty-${id}`);
-      let currentQty = parseInt(qtySpan.innerText);
-      if (currentQty > 0) {
-        currentQty--;
-        qtySpan.innerText = currentQty;
-      }
-      updateCartDisplay();
-    }
 
     function updateCartDisplay() {
       const cartItems = document.getElementById("cart-items");
       cartItems.innerHTML = '';
       let subtotal = 0;
 
-      for (const product of stock) {
-        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
-        if (qty > 0) {
-          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
-          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
-          const cost = product.price * qty;
-          const p = document.createElement('p');
-          p.textContent = `${product.name} (${flavor}) x${qty} — ${cost}₽`;
-          cartItems.appendChild(p);
-          subtotal += cost;
-        }
+      for (const item of cart) {
+        const cost = item.price * item.qty;
+        const p = document.createElement('p');
+        p.textContent = `${item.name} (${item.flavor}) x${item.qty} — ${cost}₽`;
+        cartItems.appendChild(p);
+        subtotal += cost;
       }
 
       const deliverySelect = document.getElementById("delivery");
@@ -266,30 +267,6 @@
         alert("Выбери район, иначе Гермес не найдет дорогу!");
         return;
       }
-
-      const cart = stock.map(product => {
-        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0;
-        if (qty > 0) {
-          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
-          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
-          
-          // Обновляем остатки
-          if (product.flavors && flavorEl) {
-            product.flavors[flavor] -= qty;
-            if (product.flavors[flavor] < 0) product.flavors[flavor] = 0;
-          }
-
-          return {
-            id: product.id,
-            name: product.name,
-            qty,
-            flavor,
-            price: product.price
-          };
-        }
-        return null;
-      }).filter(Boolean);
-
       if (cart.length === 0) {
         alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
         return;
@@ -309,6 +286,7 @@
       };
 
       // Обновляем интерфейс после заказа
+      cart = [];
       renderProducts();
       updateCartDisplay();
 
