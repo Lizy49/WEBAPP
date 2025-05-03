@@ -1,4 +1,4 @@
-```html
+```
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -45,11 +45,6 @@
     .product-card h3 { margin-top: 10px; font-size: 1.2rem; color: #ffd700; }
     .product-card p { font-size: 0.9rem; color: #bbb; margin: 10px 0; }
     .price { color: #fff; font-weight: bold; margin-bottom: 10px; }
-    .qty-controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; }
-    .qty-controls button {
-      background: #ffd700; border: none; border-radius: 50%;
-      width: 32px; height: 32px; font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #000;
-    }
     .flavor-select { margin: 10px 0; width: 100%; padding: 6px; border-radius: 5px; border: none; }
     .cart {
       margin-top: 40px; background: rgba(0, 0, 0, 0.6); padding: 20px;
@@ -76,6 +71,7 @@
     }
     #total-summary { margin: 10px 0; font-weight: bold; }
     #total-summary p { margin: 5px 0; }
+    .stock-info { color: #ffd700; font-size: 0.8rem; margin-top: 5px; }
   </style>
 </head>
 <body>
@@ -126,24 +122,42 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
+    // СЕРВЕРНАЯ ЧАСТЬ (ЭМУЛЯЦИЯ)
+    let serverStock = {
+      "4": { "Апельсиновая газировка": 1, "Лимонад": 1, "Пиноколада груша": 1, "Ежевичный лимонад": 1 },
+      "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол": 3 },
+      "7": { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 }
+    };
+
+    // Функция для обновления остатков на сервере (в реальности это будет API-запрос)
+    function updateServerStock(productId, flavor, newStock) {
+      if (serverStock[productId] && serverStock[productId][flavor] !== undefined) {
+        serverStock[productId][flavor] = newStock;
+        console.log(`Обновлено на сервере: ${productId} - ${flavor} = ${newStock}`);
+      }
+    }
+
+    // Функция для получения остатков с сервера (в реальности это будет API-запрос)
+    function getServerStock(productId) {
+      return serverStock[productId] || {};
+    }
+
     const products = [
       { id: 1, name: "Испаритель Geekvape Aegis B Series coil", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
       { id: 2, name: "Жидкость Skala", category: "juice", price: 450, image: 'Li/1.jpg', description: "Крепкость: 20мг, Объем: 30мл", flavors: {} },
       { id: 3, name: "Одноразка Waka", category: "disposable", price: 2000, image: 'od/1.jpg', description: "На 10000 тяг, чтобы вставило" },
-      { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: { "Апельсиновая газировка": 1, "Лимонад": 1, "Пиноколада груша": 1, "Ежевичный лимонад": 1 } },
-      { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол": 3 } },
+      { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("4") },
+      { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("5") },
       { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS 0.6 Ом" },
-      { id: 7, name: "Жидкость XYLINET?", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 } }
+      { id: 7, name: "Жидкость XYLINET?", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: getServerStock("7") }
     ];
 
-    // Копия для управления остатками
-    let stock = JSON.parse(JSON.stringify(products));
     let cart = [];
 
     function renderProducts(filter = null) {
       const list = document.getElementById('product-list');
       list.innerHTML = '';
-      const filtered = filter ? stock.filter(p => p.category === filter) : stock;
+      const filtered = filter ? products.filter(p => p.category === filter) : products;
       if (filtered.length === 0) {
         list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Товаров нет, смертный! Проверь позже.</p>';
         return;
@@ -161,10 +175,15 @@
           <h3>${product.name}</h3>
           <p>${product.description}</p>
           <p class="price">${product.price} ₽</p>
-          ${product.flavors ? `<select class="flavor-select" id="flavor-${product.id}" onchange="addToCart(${product.id})">
-                                <option value="">-- Выбери вкус --</option>
-                                ${flavorOptions}
-                              </select>` : ''}
+          ${product.flavors ? `
+            <select class="flavor-select" id="flavor-${product.id}" onchange="addToCart(${product.id})">
+              <option value="">-- Выбери вкус --</option>
+              ${flavorOptions}
+            </select>
+            <div class="stock-info" id="stock-${product.id}">
+              ${Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>')}
+            </div>
+          ` : ''}
         `;
         list.appendChild(card);
       }
@@ -175,15 +194,20 @@
       const selectedFlavor = flavorSelect.value;
       if (!selectedFlavor) return;
 
-      const product = stock.find(p => p.id === productId);
+      const product = products.find(p => p.id === productId);
       if (!product.flavors[selectedFlavor] || product.flavors[selectedFlavor] <= 0) {
         alert("Этот вкус закончился, дебил!");
         flavorSelect.value = "";
         return;
       }
 
-      // Уменьшаем остаток
+      // Уменьшаем остаток локально и на сервере
       product.flavors[selectedFlavor]--;
+      updateServerStock(productId.toString(), selectedFlavor, product.flavors[selectedFlavor]);
+
+      // Обновляем отображение остатков
+      document.getElementById(`stock-${productId}`).innerHTML = 
+        Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>');
 
       // Добавляем в корзину
       const existingItem = cart.find(item => item.id === productId && item.flavor === selectedFlavor);
@@ -207,7 +231,7 @@
     }
 
     function updateFlavorSelect(productId) {
-      const product = stock.find(p => p.id === productId);
+      const product = products.find(p => p.id === productId);
       const flavorSelect = document.getElementById(`flavor-${productId}`);
       if (!flavorSelect) return;
 
@@ -219,7 +243,6 @@
                                 </option>`
         ).join('');
 
-      // Возвращаем выбранный вкус, если он еще в наличии
       if (selectedFlavor && product.flavors[selectedFlavor] > 0) {
         flavorSelect.value = selectedFlavor;
       } else {
@@ -285,7 +308,7 @@
         timestamp: new Date().toISOString()
       };
 
-      // Обновляем интерфейс после заказа
+      // Очищаем корзину и обновляем список товаров
       cart = [];
       renderProducts();
       updateCartDisplay();
