@@ -1,69 +1,88 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #0e0e1f;
-      background-image: url('https://img.freepik.com/free-photo/view-ancient-greek-architecture-with-temple-structure_23-2151664764.jpg?semt=ais_hybrid&w=740');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: #f0f0f0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-    .hero { text-align: center; margin-bottom: 30px; animation: thunderFlash 2s ease-in-out infinite; }
-    .logo { font-size: 3rem; font-weight: 900; color: #ffd700; text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
-    .welcome { margin-top: 10px; font-size: 1.2rem; color: #ccc; }
-    .container { width: 100%; max-width: 1000px; }
-    .category-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .category-tabs button {
-      background: #ffd700; color: #000; padding: 10px 15px; border: none;
-      border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s;
-    }
-    .category-tabs button:hover { background: #fff700; }
-    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-    .product-card {
-      background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px; padding: 15px; text-align: center; backdrop-filter: blur(6px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
-    }
-    .product-card:hover { transform: scale(1.03); box-shadow: 0 0 35px rgba(255, 215, 0, 0.4); }
-    .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
-    .product-card h3 { margin-top: 10px; font-size: 1.2rem; color: #ffd700; }
-    .product-card p { font-size: 0.9rem; color: #bbb; margin: 10px 0; }
-    .price { color: #fff; font-weight: bold; margin-bottom: 10px; }
-    .qty-controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; }
-    .qty-controls button {
-      background: #ffd700; border: none; border-radius: 50%;
-      width: 32px; height: 32px; font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #000;
-    }
-    .flavor-select { margin: 10px 0; width: 100%; padding: 6px; border-radius: 5px; border: none; }
-    .cart {
-      margin-top: 40px; background: rgba(0, 0, 0, 0.6); padding: 20px;
-      border-radius: 10px; backdrop-filter: blur(8px); width: 100%; max-width: 1000px;
-    }
-    #delivery, #address {
-      width: 100%; padding: 12px; margin: 10px 0;
-      border-radius: 6px; border: none;
-    }
-    #delivery { background: rgba(255, 255, 255, 0.9); color: #000; font-weight: bold; }
-    .delivery-info { color: #ffd700; margin: 5px 0; font-size: 0.9rem; }
-    #confirmOrder {
-      margin-top: 15px; width: 100%; padding: 12px;
-      background: #ffd700; border: none; font-weight: bold;
-      border-radius: 6px; cursor: pointer; transition: all 0.3s;
-    }
-    #confirmOrder:hover { background: #fff700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-    footer { margin-top: 60px; text-align: center; color: #aaa; font-size: 0.9rem; }
-    footer a { color: #ffd700; text-decoration: none; }
-    @keyframes fadeIn { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes thunderFlash {
-      0%, 100% { text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
-      50% { text-shadow: 0 0 25px #fffb00, 0 0 45px #fff200; }
-    }
-    #total-summary { margin: 10px 0; font-weight: bold; }
-    #total-summary p { margin: 5px 0; }
+import json
+import logging
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.client.default import DefaultBotProperties
+from aiogram.filters import Command
+from aiogram import F
+
+API_TOKEN = '7592882454:AAEbeRBkrtGNK41HcyVOVZ8PYIHLuYoGD1g'
+MANAGER_CHAT_ID = 1812480625
+
+bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+dp = Dispatcher(storage=MemoryStorage())
+
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    username = message.from_user.username or message.from_user.first_name
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="🚀 Оформить заказ", web_app=WebAppInfo(url="https://olimpshop49.netlify.app/"))]
+        ],
+        resize_keyboard=True
+    )
+    await message.answer(
+        f"🔥 *Добро пожаловать в OlimpShop49, {username}!* 🔥\n\n"
+        "💎 Премиум товары с быстрой доставкой\n"
+        "⚡ Лучшие цены в твоем районе\n"
+        "🔐 Гарантия качества и анонимности\n\n"
+        "Нажми кнопку ниже чтобы начать покупки!",
+        reply_markup=keyboard
+    )
+
+@dp.message(F.web_app_data)
+async def handle_webapp_data(message: types.Message):
+    try:
+        data = json.loads(message.web_app_data.data)
+        items = data.get('items', [])
+
+        if not items:
+            await message.answer("❗ Не удалось получить товары из заказа.")
+            return
+
+        items_text = "\n".join(
+            f"▫ {item['name']} | Вкус: *{item.get('flavor', 'не указан')}* | Кол-во: {item['qty']} | Сумма: {item['price'] * item['qty']}₽"
+            for item in items
+        )
+
+        address = data.get('address', 'Не указан')
+        district = data.get('district', 'Не указан')
+        total = data.get('total', 0)
+        username = message.from_user.username or message.from_user.first_name
+
+        # Сообщение клиенту
+        await message.answer(
+            f"✅ *Ваш заказ принят!*\n\n"
+            f"{items_text}\n\n"
+            f"📍 Район: {district}\n"
+            f"🏠 Адрес: {address}\n"
+            f"💰 Итого: *{total} ₽*\n\n"
+            f"Скоро с вами свяжется менеджер!"
+        )
+
+        # Сообщение менеджеру
+        await bot.send_message(
+            chat_id=MANAGER_CHAT_ID,
+            text=(
+                f"📦 *Новый заказ!*\n\n"
+                f"{items_text}\n\n"
+                f"📍 Район: {district}\n"
+                f"🏠 Адрес: {address}\n"
+                f"💰 Сумма: *{total} ₽*\n"
+                f"👤 От: @{username}"
+            )
+        )
+
+    except Exception as e:
+        logging.exception("Ошибка при обработке WebAppData")
+        await message.answer("⚠ Произошла ошибка при обработке заказа. Попробуйте еще раз.")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == '__main__':
+    asyncio.run(main())
+ 
