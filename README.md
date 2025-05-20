@@ -1,5 +1,5 @@
-```
-<!DOCTYPE html>
+ ```html
+ <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -91,6 +91,7 @@
       <button onclick="filterCategory('juice')">Жижи</button>
       <button onclick="filterCategory('disposable')">Одноразки</button>
       <button onclick="filterCategory('vaporizer')">Испарители</button>
+      <button onclick="filterCategory('snus')">Жевательный табак</button>
       <button onclick="filterCategory()">Все товары</button>
     </div>
     <div class="products" id="product-list">
@@ -104,7 +105,7 @@
     <select id="delivery">
       <option value="">-- Выбери район, смертный --</option>
       <option value="200">3-й микрорайон и Яма (200₽)</option>
-      <option value="200">5-й микрорайон (200₽)</option>
+      <option value="200">Другой район (200₽)</option>
       <option value="225">Пригородный (225₽)</option>
       <option value="225">Звезда / Автотэк (225₽)</option>
       <option value="325">Солнечный / Пионерный (325₽)</option>
@@ -132,10 +133,7 @@
     function loadStock() {
       const savedStock = localStorage.getItem('olimpShopStock');
       return savedStock ? JSON.parse(savedStock) : {
-        "4": { "Апельсиновая газировка": 1, "Лимонад": 1, "Пиноколада груша": 1, "Ежевичный лимонад": 1 },
-        "5": { "Киви банан": 1, "Киви помела": 1, "Хвоя грейпфрут": 1, "Ананас лайм земляника": 1, "Манго банан ментол": 3 },
-        "7": { "Яблоко малина": 1, "Апельсин лемон виноград грейпфрут роза": 1, "Энергетик цитрус": 1, "Клубника арбуз": 1, "Персик ананас клюква малина": 1 },
-        "6": { "0.6 Ом": 5, "0.8 Ом": 3, "1.0 Ом": 2 }
+        "1": {"Арбуз лед": 5 ,"Драгонфрукт дыня": 5 ,"Виноград лед": 5 ,"Дыня голубика": 5 ,"FCUING FAB": 5}
       };
     }
 
@@ -147,13 +145,7 @@
     let serverStock = loadStock();
 
     const products = [
-      { id: 1, name: "Испаритель Geekvape Aegis B Series coil", category: "vaporizer", price: 300, image: 'Evapo/1.jpg', description: "Испаритель для Aegis, 0.6 Ом 15-25W." },
-      { id: 2, name: "Жидкость Skala", category: "juice", price: 450, image: 'Li/1.jpg', description: "Крепкость: 20мг, Объем: 30мл", flavors: {} },
-      { id: 3, name: "Одноразка Waka", category: "disposable", price: 2000, image: 'od/1.jpg', description: "На 10000 тяг, чтобы вставило" },
-      { id: 4, name: "Жидкость Podonki Vintage", category: "juice", price: 500, image: 'Li/2.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["4"] },
-      { id: 5, name: "Жидкость HOTSPOT", category: "juice", price: 500, image: 'Li/3.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["5"] },
-      { id: 6, name: "Картридж для XROS", category: "vaporizer", price: 200, image: 'Evapo/2.jpg', description: "Картридж для XROS", flavors: serverStock["6"] },
-      { id: 7, name: "Жидкость XYLINET x3 1шт.", category: "juice", price: 500, image: 'Li/4.jpg', description: "Крепкость: 50мг, Объем: 30мл", flavors: serverStock["7"] }
+      { id: 1, name: "Одноразка ROCK ME 25000", category: "disposable", price: 2350, image: 'od/2.jpg', description: "Крепкость: 5%, Режимы Turbo и Norm", flavors: serverStock["1"] }
     ];
 
     let cart = [];
@@ -364,4 +356,5 @@
   </script>
 </body>
 </html>
-```
+
+ ```
