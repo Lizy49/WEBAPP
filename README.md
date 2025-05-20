@@ -77,6 +77,8 @@
    #total-summary { margin: 10px 0; font-weight: bold; }
    #total-summary p { margin: 5px 0; }
    .stock-info { color: #ffd700; font-size: 0.8rem; margin-top: 5px; }
+   .stock-amount { color: #4CAF50; font-weight: bold; }
+   .out-of-stock { color: #F44336; }
  </style>
 </head>
 <body>
@@ -254,6 +256,12 @@
                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
                                </option>`
        ).join('') : '';
+       
+       const stockInfo = product.flavors ? 
+         Object.entries(product.flavors).map(([flavor, stock]) => 
+           `<div>${flavor}: <span class="${stock === 0 ? 'out-of-stock' : 'stock-amount'}">${stock} шт.</span></div>`
+         ).join('') : '';
+       
        card.innerHTML = `
          <img src="${product.image}" alt="${product.name}" />
          <h3>${product.name}</h3>
@@ -265,7 +273,7 @@
              ${flavorOptions}
            </select>
            <div class="stock-info" id="stock-${product.id}">
-             ${Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>')}
+             ${stockInfo}
            </div>
            <div class="qty-controls">
              <button onclick="decreaseQty(${product.id})">−</button>
@@ -273,6 +281,7 @@
              <button onclick="increaseQty(${product.id})">+</button>
            </div>
          ` : `
+           <div class="stock-info">В наличии: <span class="stock-amount">${product.stock || 15} шт.</span></div>
            <div class="qty-controls">
              <button onclick="decreaseQty(${product.id})">−</button>
              <span id="qty-${product.id}">0</span>
