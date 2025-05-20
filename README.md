@@ -309,7 +309,7 @@
      if (flavorSelect) {
        selectedFlavor = flavorSelect.value;
        if (!selectedFlavor) {
-         alert("Сначала выбери тип, дебил!");
+         alert("Сначала выбери вкус!");
          return;
        }
      }
@@ -321,7 +321,7 @@
        currentQty++;
        qtySpan.innerText = currentQty;
      } else {
-       alert("Больше нет в наличии, идиот!");
+       alert("Больше нет в наличии!");
      }
      updateCartDisplay();
    }
@@ -372,11 +372,11 @@
      const deliveryPrice = parseInt(deliverySelect.value);
 
      if (!address) {
-       alert("Где адрес, смертный? Зевс не всевидящий!");
+       alert("Укажите адрес доставки!");
        return;
      }
      if (!deliveryPrice) {
-       alert("Выбери район, иначе Гермес не найдет дорогу!");
+       alert("Выберите район доставки!");
        return;
      }
 
@@ -405,7 +405,7 @@
      }).filter(Boolean);
 
      if (cart.length === 0) {
-       alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
+       alert("Корзина пуста!");
        return;
      }
 
@@ -435,12 +435,15 @@
        Telegram.WebApp.close();
      } else {
        console.log("Заказ оформлен:", summary);
-       alert("Заказ отправлен! Жди молнию Зевса.");
+       alert("Заказ отправлен!");
      }
    }
 
-   renderProducts();
-   document.getElementById("delivery").addEventListener("change", updateCartDisplay);
+   // Инициализация при загрузке
+   document.addEventListener('DOMContentLoaded', () => {
+     renderProducts();
+     document.getElementById("delivery").addEventListener("change", updateCartDisplay);
+   });
  </script>
 </body>
 </html>
