@@ -1,360 +1,459 @@
- ```html
- <!DOCTYPE html>
+```
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OlimpShop49</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: #0e0e1f;
-      background-image: url('https://img.freepik.com/free-photo/view-ancient-greek-architecture-with-temple-structure_23-2151664764.jpg?semt=ais_hybrid&w=740');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: #f0f0f0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-    .hero { text-align: center; margin-bottom: 30px; animation: thunderFlash 2s ease-in-out infinite; }
-    .logo { font-size: 3rem; font-weight: 900; color: #ffd700; text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
-    .welcome { margin-top: 10px; font-size: 1.2rem; color: #ccc; }
-    .container { width: 100%; max-width: 1000px; }
-    .category-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .category-tabs button {
-      background: #ffd700; color: #000; padding: 10px 15px; border: none;
-      border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s;
-    }
-    .category-tabs button:hover { background: #fff700; }
-    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-    .product-card {
-      background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px; padding: 15px; text-align: center; backdrop-filter: blur(6px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
-    }
-    .product-card:hover { transform: scale(1.03); box-shadow: 0 0 35px rgba(255, 215, 0, 0.4); }
-    .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
-    .product-card h3 { margin-top: 10px; font-size: 1.2rem; color: #ffd700; }
-    .product-card p { font-size: 0.9rem; color: #bbb; margin: 10px 0; }
-    .price { color: #fff; font-weight: bold; margin-bottom: 10px; }
-    .qty-controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; }
-    .qty-controls button {
-      background: #ffd700; border: none; border-radius: 50%;
-      width: 32px; height: 32px; font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #000;
-    }
-    .flavor-select { margin: 10px 0; width: 100%; padding: 6px; border-radius: 5px; border: none; }
-    .cart {
-      margin-top: 40px; background: rgba(0, 0, 0, 0.6); padding: 20px;
-      border-radius: 10px; backdrop-filter: blur(8px); width: 100%; max-width: 1000px;
-    }
-    #delivery, #address {
-      width: 100%; padding: 12px; margin: 10px 0;
-      border-radius: 6px; border: none;
-    }
-    #delivery { background: rgba(255, 255, 255, 0.9); color: #000; font-weight: bold; }
-    .delivery-info { color: #ffd700; margin: 5px 0; font-size: 0.9rem; }
-    #confirmOrder {
-      margin-top: 15px; width: 100%; padding: 12px;
-      background: #ffd700; border: none; font-weight: bold;
-      border-radius: 6px; cursor: pointer; transition: all 0.3s;
-    }
-    #confirmOrder:hover { background: #fff700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
-    footer { margin-top: 60px; text-align: center; color: #aaa; font-size: 0.9rem; }
-    footer a { color: #ffd700; text-decoration: none; }
-    @keyframes fadeIn { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes thunderFlash {
-      0%, 100% { text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
-      50% { text-shadow: 0 0 25px #fffb00, 0 0 45px #fff200; }
-    }
-    #total-summary { margin: 10px 0; font-weight: bold; }
-    #total-summary p { margin: 5px 0; }
-    .stock-info { color: #ffd700; font-size: 0.8rem; margin-top: 5px; }
-  </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>OlimpShop49</title>
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+ <style>
+   * { margin: 0; padding: 0; box-sizing: border-box; }
+   body {
+     font-family: 'Montserrat', sans-serif;
+     background-color: #0e0e1f;
+     background-image: url('https://img.freepik.com/free-photo/view-ancient-greek-architecture-with-temple-structure_23-2151664764.jpg?semt=ais_hybrid&w=740');
+     background-size: cover;
+     background-position: center;
+     background-attachment: fixed;
+     color: #f0f0f0;
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding: 20px;
+     animation: fadeIn 1s ease-in-out;
+   }
+   .hero { text-align: center; margin-bottom: 30px; animation: thunderFlash 2s ease-in-out infinite; }
+   .logo { font-size: 3rem; font-weight: 900; color: #ffd700; text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
+   .welcome { margin-top: 10px; font-size: 1.2rem; color: #ccc; }
+   .container { width: 100%; max-width: 1000px; }
+   .category-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+   .category-tabs button {
+     background: #ffd700; color: #000; padding: 10px 15px; border: none;
+     border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s;
+   }
+   .category-tabs button:hover { background: #fff700; }
+   .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+   .product-card {
+     background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+     border-radius: 12px; padding: 15px; text-align: center; backdrop-filter: blur(6px);
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+     box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+   }
+   .product-card:hover { transform: scale(1.03); box-shadow: 0 0 35px rgba(255, 215, 0, 0.4); }
+   .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
+   .product-card h3 { margin-top: 10px; font-size: 1.2rem; color: #ffd700; }
+   .product-card p { font-size: 0.9rem; color: #bbb; margin: 10px 0; }
+   .price { color: #fff; font-weight: bold; margin-bottom: 10px; }
+   .qty-controls { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; }
+   .qty-controls button {
+     background: #ffd700; border: none; border-radius: 50%;
+     width: 32px; height: 32px; font-weight: bold; font-size: 1.1rem; cursor: pointer; color: #000;
+   }
+   .flavor-select { margin: 10px 0; width: 100%; padding: 6px; border-radius: 5px; border: none; }
+   .cart {
+     margin-top: 40px; background: rgba(0, 0, 0, 0.6); padding: 20px;
+     border-radius: 10px; backdrop-filter: blur(8px); width: 100%; max-width: 1000px;
+   }
+   #delivery, #address {
+     width: 100%; padding: 12px; margin: 10px 0;
+     border-radius: 6px; border: none;
+   }
+   #delivery { background: rgba(255, 255, 255, 0.9); color: #000; font-weight: bold; }
+   .delivery-info { color: #ffd700; margin: 5px 0; font-size: 0.9rem; }
+   #confirmOrder {
+     margin-top: 15px; width: 100%; padding: 12px;
+     background: #ffd700; border: none; font-weight: bold;
+     border-radius: 6px; cursor: pointer; transition: all 0.3s;
+   }
+   #confirmOrder:hover { background: #fff700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+   footer { margin-top: 60px; text-align: center; color: #aaa; font-size: 0.9rem; }
+   footer a { color: #ffd700; text-decoration: none; }
+   @keyframes fadeIn { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+   @keyframes thunderFlash {
+     0%, 100% { text-shadow: 0 0 15px #ffd700, 0 0 30px #fffb00; }
+     50% { text-shadow: 0 0 25px #fffb00, 0 0 45px #fff200; }
+   }
+   #total-summary { margin: 10px 0; font-weight: bold; }
+   #total-summary p { margin: 5px 0; }
+   .stock-info { color: #ffd700; font-size: 0.8rem; margin-top: 5px; }
+   .stock-amount { color: #4CAF50; font-weight: bold; }
+   .out-of-stock { color: #F44336; }
+ </style>
 </head>
 <body>
-  <div class="hero">
-    <h1 class="logo">⚡️ OlimpShop49 ⚡️</h1>
-    <p class="welcome">Добро пожаловать! Почувствуй гнев Зевса — выбери свой товар и будь молниеносным.</p>
-  </div>
+ <div class="hero">
+   <h1 class="logo">⚡️ OlimpShop49 ⚡️</h1>
+   <p class="welcome">Добро пожаловать! Почувствуй гнев Зевса — выбери свой товар и будь молниеносным.</p>
+ </div>
 
-  <div class="container">
-    <div class="category-tabs">
-      <button onclick="filterCategory('pod')">Подики</button>
-      <button onclick="filterCategory('juice')">Жижи</button>
-      <button onclick="filterCategory('disposable')">Одноразки</button>
-      <button onclick="filterCategory('vaporizer')">Испарители</button>
-      <button onclick="filterCategory('snus')">Жевательный табак</button>
-      <button onclick="filterCategory()">Все товары</button>
-    </div>
-    <div class="products" id="product-list">
-      <!-- JS добавит товары сюда -->
-    </div>
-  </div>
+ <div class="container">
+   <div class="category-tabs">
+     <button onclick="filterCategory('pod')">Подики</button>
+     <button onclick="filterCategory('juice')">Жижи</button>
+     <button onclick="filterCategory('disposable')">Одноразки</button>
+     <button onclick="filterCategory('vaporizer')">Испарители</button>
+     <button onclick="filterCategory('snus')">Жевательный табак</button>
+     <button onclick="filterCategory()">Все товары</button>
+   </div>
+   <div class="products" id="product-list">
+     <!-- JS добавит товары сюда -->
+   </div>
+ </div>
 
-  <div class="cart" id="cart">
-    <h2>🛒 Корзина</h2>
-    <div id="cart-items"></div>
-    <select id="delivery">
-      <option value="">-- Выбери район, смертный --</option>
-      <option value="200">3-й микрорайон и Яма (200₽)</option>
-      <option value="200">Другой район (200₽)</option>
-      <option value="225">Пригородный (225₽)</option>
-      <option value="225">Звезда / Автотэк (225₽)</option>
-      <option value="325">Солнечный / Пионерный (325₽)</option>
-      <option value="180">Центр (180₽)</option>
-    </select>
-    <p class="delivery-info">⚡ Выбери район и получи молнию Зевса прямо в руки!</p>
-    <input type="text" id="address" placeholder="Точный адрес, смертный" />
-    <div id="total-summary"></div>
-    <button id="confirmOrder" onclick="submitOrder()">⚡ Подтвердить заказ ⚡</button>
-  </div>
+ <div class="cart" id="cart">
+   <h2>🛒 Корзина</h2>
+   <div id="cart-items"></div>
+   <select id="delivery">
+     <option value="">-- Выбери район, смертный --</option>
+     <option value="200">3-й микрорайон и Яма (200₽)</option>
+     <option value="200">Другой район (200₽)</option>
+     <option value="225">Пригородный (225₽)</option>
+     <option value="225">Звезда / Автотэк (225₽)</option>
+     <option value="325">Солнечный / Пионерный (325₽)</option>
+     <option value="180">Центр (180₽)</option>
+   </select>
+   <p class="delivery-info">⚡ Выбери район и получи молнию Зевса прямо в руки!</p>
+   <input type="text" id="address" placeholder="Точный адрес, смертный" />
+   <div id="total-summary"></div>
+   <button id="confirmOrder" onclick="submitOrder()">⚡ Подтвердить заказ ⚡</button>
+ </div>
 
-  <footer>
-    <hr style="border-color: rgba(255, 255, 255, 0.2); margin-bottom: 15px;">
-    <p>© 2025 OlimpShop49. Все права защищены.</p>
-    <p>
-      <a href="https://t.me/olimpmagadan" target="_blank">Мы в Telegram</a> |
-      <a href="#">Политика конфиденциальности</a> |
-      <a href="#">Контакты</a>
-    </p>
-  </footer>
+ <footer>
+   <hr style="border-color: rgba(255, 255, 255, 0.2); margin-bottom: 15px;">
+   <p>© 2025 OlimpShop49. Все права защищены.</p>
+   <p>
+     <a href="https://t.me/olimpmagadan" target="_blank">Мы в Telegram</a> |
+     <a href="#">Политика конфиденциальности</a> |
+     <a href="#">Контакты</a>
+   </p>
+ </footer>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script>
-    // Загрузка остатков из localStorage
-    function loadStock() {
-      const savedStock = localStorage.getItem('olimpShopStock');
-      return savedStock ? JSON.parse(savedStock) : {
-        "1": {"Арбуз лед": 5 ,"Драгонфрукт дыня": 5 ,"Виноград лед": 5 ,"Дыня голубика": 5 ,"FCUING FAB": 5}
-      };
-    }
+ <script src="https://telegram.org/js/telegram-web-app.js"></script>
+ <script>
+   // Загрузка остатков из localStorage
+   function loadStock() {
+     const savedStock = localStorage.getItem('olimpShopStock');
+     return savedStock ? JSON.parse(savedStock) : {
+       "1": {"Арбуз лед": 5, "Драгонфрукт дыня": 5, "Виноград лед": 5, "Дыня голубика": 5, "FCUING FAB": 5},
+       "2": {"Цитрусовый энергетик": 5, "Черника голубика": 5, "Клюква брусника": 5, "Клубника заварной крем": 5, "Дынное мороженое": 5},
+       "3": {"Манго апельсин гуава": 5, "Скитлз и смородина": 5, "Мята и холс": 5, "Лемонграсс и малина": 5, "Яблочные мармеладные червячки": 5},
+       "4": {"Кола лайм": 5, "Банан клубника": 5, "Киви гуава и маракуйя": 5, "Черника малина": 5, "Яблоко малина": 5},
+       "5": {"Взрыв Мята 75": 5, "Морозна мята 75": 5, "Драгонфрукт 150": 5, "Сладкая мята 150": 5, "Изумруд 150": 5},
+       "6": {"Сакура виноград": 5},
+       "7": {"Холодная вишня": 5},
+       "8": {"Черный лед": 5},
+       "9": {"Роза личи": 5}
+     };
+   }
 
-    // Сохранение остатков в localStorage
-    function saveStock(stock) {
-      localStorage.setItem('olimpShopStock', JSON.stringify(stock));
-    }
+   // Сохранение остатков в localStorage
+   function saveStock(stock) {
+     localStorage.setItem('olimpShopStock', JSON.stringify(stock));
+   }
 
-    let serverStock = loadStock();
+   let serverStock = loadStock();
 
-    const products = [
-      { id: 1, name: "Одноразка ROCK ME 25000", category: "disposable", price: 2350, image: 'od/2.jpg', description: "Крепкость: 5%, Режимы Turbo и Norm", flavors: serverStock["1"] }
-    ];
+   const products = [
+     { 
+       id: 1, 
+       name: "ROCK ME 25000", 
+       category: "disposable", 
+       price: 2350, 
+       image: 'od/2.jpg', 
+       description: "Крепкость: 5%, Режимы Turbo и Norm", 
+       flavors: serverStock["1"] 
+     },
+     { 
+       id: 2, 
+       name: "Анархия V2", 
+       category: "disposable", 
+       price: 500, 
+       image: 'od/2.jpg', 
+       description: "Крепкость: 5%", 
+       flavors: serverStock["2"] 
+     },
+     { 
+       id: 3, 
+       name: "PODONKI", 
+       category: "pod", 
+       price: 500, 
+       image: 'od/2.jpg', 
+       description: "Крепкость: 5%", 
+       flavors: serverStock["3"] 
+     },
+     { 
+       id: 4, 
+       name: "Rick and Morty", 
+       category: "disposable", 
+       price: 600, 
+       image: 'od/2.jpg', 
+       description: "Крепкость: 10%", 
+       flavors: serverStock["4"] 
+     },
+     { 
+       id: 5, 
+       name: "ICEBERG", 
+       category: "juice", 
+       price: 500, 
+       image: 'od/2.jpg', 
+       description: "Жидкость для заправки", 
+       flavors: serverStock["5"] 
+     },
+     { 
+       id: 6, 
+       name: "MEGABOX 30000", 
+       category: "disposable", 
+       price: 2400, 
+       image: 'od/2.jpg', 
+       description: "Сакура виноград", 
+       flavors: serverStock["6"] 
+     },
+     { 
+       id: 7, 
+       name: "PODONKI MALASIAN 12000", 
+       category: "pod", 
+       price: 1700, 
+       image: 'od/2.jpg', 
+       description: "Холодная вишня", 
+       flavors: serverStock["7"] 
+     },
+     { 
+       id: 8, 
+       name: "Bubble Mon 10000", 
+       category: "disposable", 
+       price: 1500, 
+       image: 'od/2.jpg', 
+       description: "Черный лед", 
+       flavors: serverStock["8"] 
+     },
+     { 
+       id: 9, 
+       name: "BJORN Zlou 40000", 
+       category: "disposable", 
+       price: 3300, 
+       image: 'od/2.jpg', 
+       description: "Роза личи", 
+       flavors: serverStock["9"] 
+     }
+   ];
 
-    let cart = [];
+   let cart = [];
 
-    function renderProducts(filter = null) {
-      const list = document.getElementById('product-list');
-      list.innerHTML = '';
-      const filtered = filter ? products.filter(p => p.category === filter) : products;
-      if (filtered.length === 0) {
-        list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Товаров нет, смертный! Проверь позже.</p>';
-        return;
-      }
-      for (const product of filtered) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        const flavorOptions = product.flavors ? Object.entries(product.flavors).map(
-          ([flavor, stock]) => `<option value="${flavor}" ${stock === 0 ? 'disabled' : ''}>
-                                  ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
-                                </option>`
-        ).join('') : '';
-        card.innerHTML = `
-          <img src="${product.image}" alt="${product.name}" />
-          <h3>${product.name}</h3>
-          <p>${product.description}</p>
-          <p class="price">${product.price} ₽</p>
-          ${product.flavors ? `
-            <select class="flavor-select" id="flavor-${product.id}" onchange="updateMaxQty(${product.id})">
-              <option value="">-- Выбери ${product.category === 'vaporizer' ? 'сопротивление' : 'вкус'} --</option>
-              ${flavorOptions}
-            </select>
-            <div class="stock-info" id="stock-${product.id}">
-              ${Object.entries(product.flavors).map(([flavor, stock]) => `${flavor}: ${stock} шт.`).join('<br>')}
-            </div>
-            <div class="qty-controls">
-              <button onclick="decreaseQty(${product.id})">−</button>
-              <span id="qty-${product.id}">0</span>
-              <button onclick="increaseQty(${product.id})">+</button>
-            </div>
-          ` : `
-            <div class="qty-controls">
-              <button onclick="decreaseQty(${product.id})">−</button>
-              <span id="qty-${product.id}">0</span>
-              <button onclick="increaseQty(${product.id})">+</button>
-            </div>
-          `}
-        `;
-        list.appendChild(card);
-      }
-    }
+   function renderProducts(filter = null) {
+     const list = document.getElementById('product-list');
+     list.innerHTML = '';
+     const filtered = filter ? products.filter(p => p.category === filter) : products;
+     if (filtered.length === 0) {
+       list.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Товаров нет, смертный! Проверь позже.</p>';
+       return;
+     }
+     for (const product of filtered) {
+       const card = document.createElement('div');
+       card.className = 'product-card';
+       const flavorOptions = product.flavors ? Object.entries(product.flavors).map(
+         ([flavor, stock]) => `<option value="${flavor}" ${stock === 0 ? 'disabled' : ''}>
+                                 ${flavor}${stock === 0 ? ' (нет в наличии)' : ''} 
+                               </option>`
+       ).join('') : '';
+       
+       const stockInfo = product.flavors ? 
+         Object.entries(product.flavors).map(([flavor, stock]) => 
+           `<div>${flavor}: <span class="${stock === 0 ? 'out-of-stock' : 'stock-amount'}">${stock} шт.</span></div>`
+         ).join('') : '';
+       
+       card.innerHTML = `
+         <img src="${product.image}" alt="${product.name}" />
+         <h3>${product.name}</h3>
+         <p>${product.description}</p>
+         <p class="price">${product.price} ₽</p>
+         ${product.flavors ? `
+           <select class="flavor-select" id="flavor-${product.id}" onchange="updateMaxQty(${product.id})">
+             <option value="">-- Выбери ${product.category === 'vaporizer' ? 'сопротивление' : 'вкус'} --</option>
+             ${flavorOptions}
+           </select>
+           <div class="stock-info" id="stock-${product.id}">
+             ${stockInfo}
+           </div>
+           <div class="qty-controls">
+             <button onclick="decreaseQty(${product.id})">−</button>
+             <span id="qty-${product.id}">0</span>
+             <button onclick="increaseQty(${product.id})">+</button>
+           </div>
+         ` : `
+           <div class="stock-info">В наличии: <span class="stock-amount">${product.stock || 15} шт.</span></div>
+           <div class="qty-controls">
+             <button onclick="decreaseQty(${product.id})">−</button>
+             <span id="qty-${product.id}">0</span>
+             <button onclick="increaseQty(${product.id})">+</button>
+           </div>
+         `}
+       `;
+       list.appendChild(card);
+     }
+   }
 
-    function updateMaxQty(id) {
-      const flavorSelect = document.getElementById(`flavor-${id}`);
-      const selectedFlavor = flavorSelect.value;
-      const product = products.find(p => p.id === id);
-      const maxQty = product.flavors[selectedFlavor];
-      const qtySpan = document.getElementById(`qty-${id}`);
-      const currentQty = parseInt(qtySpan.innerText);
-      
-      if (currentQty > maxQty) {
-        qtySpan.innerText = maxQty;
-      }
-      updateCartDisplay();
-    }
+   function updateMaxQty(id) {
+     const flavorSelect = document.getElementById(`flavor-${id}`);
+     const selectedFlavor = flavorSelect.value;
+     const product = products.find(p => p.id === id);
+     const maxQty = product.flavors[selectedFlavor];
+     const qtySpan = document.getElementById(`qty-${id}`);
+     const currentQty = parseInt(qtySpan.innerText);
+     
+     if (currentQty > maxQty) {
+       qtySpan.innerText = maxQty;
+     }
+     updateCartDisplay();
+   }
 
-    function filterCategory(cat) { renderProducts(cat); }
+   function filterCategory(cat) { renderProducts(cat); }
 
-    function increaseQty(id) {
-      const qtySpan = document.getElementById(`qty-${id}`);
-      const flavorSelect = document.getElementById(`flavor-${id}`);
-      const product = products.find(p => p.id === id);
-      
-      let selectedFlavor = null;
-      if (flavorSelect) {
-        selectedFlavor = flavorSelect.value;
-        if (!selectedFlavor) {
-          alert("Сначала выбери тип, дебил!");
-          return;
-        }
-      }
+   function increaseQty(id) {
+     const qtySpan = document.getElementById(`qty-${id}`);
+     const flavorSelect = document.getElementById(`flavor-${id}`);
+     const product = products.find(p => p.id === id);
+     
+     let selectedFlavor = null;
+     if (flavorSelect) {
+       selectedFlavor = flavorSelect.value;
+       if (!selectedFlavor) {
+         alert("Сначала выбери вкус!");
+         return;
+       }
+     }
 
-      let currentQty = parseInt(qtySpan.innerText);
-      let maxQty = product.flavors ? product.flavors[selectedFlavor] : 15;
+     let currentQty = parseInt(qtySpan.innerText);
+     let maxQty = product.flavors ? product.flavors[selectedFlavor] : 15;
 
-      if (currentQty < maxQty) {
-        currentQty++;
-        qtySpan.innerText = currentQty;
-      } else {
-        alert("Больше нет в наличии, идиот!");
-      }
-      updateCartDisplay();
-    }
+     if (currentQty < maxQty) {
+       currentQty++;
+       qtySpan.innerText = currentQty;
+     } else {
+       alert("Больше нет в наличии!");
+     }
+     updateCartDisplay();
+   }
 
-    function decreaseQty(id) {
-      const qtySpan = document.getElementById(`qty-${id}`);
-      let currentQty = parseInt(qtySpan.innerText);
-      if (currentQty > 0) {
-        currentQty--;
-        qtySpan.innerText = currentQty;
-      }
-      updateCartDisplay();
-    }
+   function decreaseQty(id) {
+     const qtySpan = document.getElementById(`qty-${id}`);
+     let currentQty = parseInt(qtySpan.innerText);
+     if (currentQty > 0) {
+       currentQty--;
+       qtySpan.innerText = currentQty;
+     }
+     updateCartDisplay();
+   }
 
-    function updateCartDisplay() {
-      const cartItems = document.getElementById("cart-items");
-      cartItems.innerHTML = '';
-      let subtotal = 0;
+   function updateCartDisplay() {
+     const cartItems = document.getElementById("cart-items");
+     cartItems.innerHTML = '';
+     let subtotal = 0;
 
-      for (const product of products) {
-        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
-        if (qty > 0) {
-          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
-          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
-          const cost = product.price * qty;
-          const p = document.createElement('p');
-          p.textContent = `${product.name} (${flavor}) x${qty} — ${cost}₽`;
-          cartItems.appendChild(p);
-          subtotal += cost;
-        }
-      }
+     for (const product of products) {
+       const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
+       if (qty > 0) {
+         const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
+         const flavor = flavorEl ? flavorEl.value : 'Стандарт';
+         const cost = product.price * qty;
+         const p = document.createElement('p');
+         p.textContent = `${product.name} (${flavor}) x${qty} — ${cost}₽`;
+         cartItems.appendChild(p);
+         subtotal += cost;
+       }
+     }
 
-      const deliverySelect = document.getElementById("delivery");
-      const deliveryPrice = deliverySelect.value ? parseInt(deliverySelect.value) : 0;
-      const deliveryName = deliverySelect.selectedOptions[0]?.text || "";
+     const deliverySelect = document.getElementById("delivery");
+     const deliveryPrice = deliverySelect.value ? parseInt(deliverySelect.value) : 0;
+     const deliveryName = deliverySelect.selectedOptions[0]?.text || "";
 
-      document.getElementById("total-summary").innerHTML = `
-        <p>Товары: ${subtotal}₽</p>
-        ${deliveryName ? `<p>Доставка: ${deliveryName}</p>` : ''}
-        <p style="color: #ffd700;">Итого: ${subtotal + deliveryPrice}₽</p>
-      `;
-    }
+     document.getElementById("total-summary").innerHTML = `
+       <p>Товары: ${subtotal}₽</p>
+       ${deliveryName ? `<p>Доставка: ${deliveryName}</p>` : ''}
+       <p style="color: #ffd700;">Итого: ${subtotal + deliveryPrice}₽</p>
+     `;
+   }
 
-    function submitOrder() {
-      const address = document.getElementById('address').value.trim();
-      const deliverySelect = document.getElementById("delivery");
-      const district = deliverySelect.selectedOptions[0]?.text;
-      const deliveryPrice = parseInt(deliverySelect.value);
+   function submitOrder() {
+     const address = document.getElementById('address').value.trim();
+     const deliverySelect = document.getElementById("delivery");
+     const district = deliverySelect.selectedOptions[0]?.text;
+     const deliveryPrice = parseInt(deliverySelect.value);
 
-      if (!address) {
-        alert("Где адрес, смертный? Зевс не всевидящий!");
-        return;
-      }
-      if (!deliveryPrice) {
-        alert("Выбери район, иначе Гермес не найдет дорогу!");
-        return;
-      }
+     if (!address) {
+       alert("Укажите адрес доставки!");
+       return;
+     }
+     if (!deliveryPrice) {
+       alert("Выберите район доставки!");
+       return;
+     }
 
-      const cart = products.map(product => {
-        const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
-        if (qty > 0) {
-          const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
-          const flavor = flavorEl ? flavorEl.value : 'Стандарт';
-          
-          // Обновляем остатки
-          if (product.flavors && flavorEl) {
-            product.flavors[flavor] -= qty;
-            if (product.flavors[flavor] < 0) product.flavors[flavor] = 0;
-            serverStock[product.id][flavor] = product.flavors[flavor];
-          }
+     const cart = products.map(product => {
+       const qty = parseInt(document.getElementById(`qty-${product.id}`)?.innerText || 0);
+       if (qty > 0) {
+         const flavorEl = product.flavors ? document.getElementById(`flavor-${product.id}`) : null;
+         const flavor = flavorEl ? flavorEl.value : 'Стандарт';
+         
+         // Обновляем остатки
+         if (product.flavors && flavorEl) {
+           product.flavors[flavor] -= qty;
+           if (product.flavors[flavor] < 0) product.flavors[flavor] = 0;
+           serverStock[product.id][flavor] = product.flavors[flavor];
+         }
 
-          return {
-            id: product.id,
-            name: product.name,
-            qty,
-            flavor,
-            price: product.price
-          };
-        }
-        return null;
-      }).filter(Boolean);
+         return {
+           id: product.id,
+           name: product.name,
+           qty,
+           flavor,
+           price: product.price
+         };
+       }
+       return null;
+     }).filter(Boolean);
 
-      if (cart.length === 0) {
-        alert("Корзина пуста! Ты что, не хочешь гнева Зевса?");
-        return;
-      }
+     if (cart.length === 0) {
+       alert("Корзина пуста!");
+       return;
+     }
 
-      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      const total = subtotal + deliveryPrice;
+     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+     const total = subtotal + deliveryPrice;
 
-      const summary = {
-        address,
-        district,
-        items: cart,
-        subtotal,
-        deliveryPrice,
-        total,
-        timestamp: new Date().toISOString()
-      };
+     const summary = {
+       address,
+       district,
+       items: cart,
+       subtotal,
+       deliveryPrice,
+       total,
+       timestamp: new Date().toISOString()
+     };
 
-      // Сохраняем обновленные остатки
-      saveStock(serverStock);
+     // Сохраняем обновленные остатки
+     saveStock(serverStock);
 
-      // Обновляем интерфейс после заказа
-      renderProducts();
-      updateCartDisplay();
+     // Обновляем интерфейс после заказа
+     renderProducts();
+     updateCartDisplay();
 
-      // Отправка в Telegram (если подключен)
-      if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        Telegram.WebApp.sendData(JSON.stringify(summary));
-        Telegram.WebApp.close();
-      } else {
-        console.log("Заказ оформлен:", summary);
-        alert("Заказ отправлен! Жди молнию Зевса.");
-      }
-    }
+     // Отправка в Telegram (если подключен)
+     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+       Telegram.WebApp.sendData(JSON.stringify(summary));
+       Telegram.WebApp.close();
+     } else {
+       console.log("Заказ оформлен:", summary);
+       alert("Заказ отправлен!");
+     }
+   }
 
-    renderProducts();
-    document.getElementById("delivery").addEventListener("change", updateCartDisplay);
-  </script>
+   // Инициализация при загрузке
+   document.addEventListener('DOMContentLoaded', () => {
+     renderProducts();
+     document.getElementById("delivery").addEventListener("change", updateCartDisplay);
+   });
+ </script>
 </body>
 </html>
-
- ```
+```
